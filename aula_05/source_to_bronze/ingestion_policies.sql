@@ -2,25 +2,28 @@
 -- COMMAND ----------
 -- Ingestão batch de dados de policies para a camada bronze
 -- Este script assume que o arquivo policies.csv já está disponível no volume
--- Volume: /Volumes/smart_claims_dev/00_landing/sql_server/policies.csv
--- Destino: smart_claims_dev.01_bronze.policies
+-- Volume: /Volumes/${catalog}/00_landing/sql_server/policies.csv
+-- Destino: ${catalog}.${schema_bronze}.policies
+--
+-- VARIÁVEIS DE TASK (definidas no Lakeflow Job):
+--   ${catalog} - Nome do catálogo (ex: smart_claims_dev)
+--   ${schema_bronze}  - Nome do schema bronze (ex: 01_bronze)
 
 -- COMMAND ----------
 -- DBTITLE 1,Configuração do catálogo e schema
-USE CATALOG smart_claims_dev;
-USE SCHEMA 01_bronze;
+USE CATALOG ${catalog};
+USE SCHEMA ${schema_bronze};
 
 -- COMMAND ----------
 -- Remove a tabela se existir (para re-ingestão)
-DROP TABLE IF EXISTS smart_claims_dev.01_bronze.policies;
+DROP TABLE IF EXISTS ${catalog}.${schema_bronze}.policies;
 
--- Cria a tabela bronze usando CREATE TABLE AS
 -- COMMAND ----------
 -- Cria a tabela bronze usando CREATE TABLE AS
-CREATE TABLE smart_claims_dev.01_bronze.policies
+CREATE TABLE ${catalog}.${schema_bronze}.policies
 AS SELECT *
 FROM read_files(
-  '/Volumes/smart_claims_dev/00_landing/sql_server/policies.csv',
+  '/Volumes/${catalog}/00_landing/sql_server/policies.csv',
   format => 'csv'
 );
 

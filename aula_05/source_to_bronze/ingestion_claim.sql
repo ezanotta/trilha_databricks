@@ -4,11 +4,11 @@
 -- Este script processa TODOS os arquivos claims*.csv do volume automaticamente
 -- Volume: /Volumes/${catalog}/00_landing/sql_server/
 -- Arquivos processados: claims.csv, claims_02.csv, claims_03.csv, etc. (todos automaticamente)
--- Destino: ${catalog}.${schema}.claims
+-- Destino: ${catalog}.${schema_bronze}.claims
 --
 -- VARIÁVEIS DE TASK (definidas no Lakeflow Job):
 --   ${catalog} - Nome do catálogo (ex: smart_claims_dev)
---   ${schema}  - Nome do schema (ex: 01_bronze)
+--   ${schema_bronze}  - Nome do schema bronze (ex: 01_bronze)
 --
 -- IMPORTANTE: Este script reprocessa TODOS os arquivos claims*.csv sempre que executado
 -- Ideal para reprocessar dados quando novos arquivos chegam com o mesmo schema
@@ -17,11 +17,11 @@
 -- COMMAND ----------
 -- DBTITLE 1,Configuração do catálogo e schema
 USE CATALOG ${catalog};
-USE SCHEMA ${schema};
+USE SCHEMA ${schema_bronze};
 
 -- COMMAND ----------
 -- Remove a tabela se existir (para re-ingestão completa)
-DROP TABLE IF EXISTS ${catalog}.${schema}.claims;
+DROP TABLE IF EXISTS ${catalog}.${schema_bronze}.claims;
 
 -- Cria a tabela bronze processando TODOS os arquivos claims*.csv automaticamente
 -- O padrão glob 'claims*.csv' processa todos os arquivos que começam com 'claims' e terminam com '.csv'
@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS ${catalog}.${schema}.claims;
 
 -- COMMAND ----------
 -- Cria a tabela bronze processando TODOS os arquivos claims*.csv automaticamente
-CREATE TABLE ${catalog}.${schema}.claims
+CREATE TABLE ${catalog}.${schema_bronze}.claims
 AS SELECT *
 FROM read_files(
   '/Volumes/${catalog}/00_landing/sql_server/claims*.csv',
