@@ -10,6 +10,7 @@ Este repositório contém os arquivos da Trilha de Databricks da Jornada de Dado
 - **Aula 02 - Databricks Fundamentals**
 - **Aula 03 - Unity Catalog**
 - **Aula 04 - Lakeflow Connect**
+- **Aula 05 - Lakeflow Jobs**
 
 ### Workshop Especial
 
