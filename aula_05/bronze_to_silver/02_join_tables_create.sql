@@ -1,11 +1,21 @@
+-- Databricks notebook source
+-- COMMAND ----------
+-- DBTITLE 1,Join de Tabelas - Criar claims_enriched
 -- Task: Criar tabela claims_enriched combinando claims, policies e customers
--- Variaveis esperadas: ${catalog}, ${schema_bronze}, ${schema_silver}
+-- Variáveis esperadas: ${catalog}, ${schema_bronze}, ${schema_silver}
 
+-- COMMAND ----------
+-- DBTITLE 1,Configuração do catálogo e schema
 USE CATALOG ${catalog};
 USE SCHEMA ${schema_silver};
 
+-- COMMAND ----------
+-- DBTITLE 1,Remove tabela se existir
 DROP TABLE IF EXISTS ${catalog}.${schema_silver}.claims_enriched;
 
+-- COMMAND ----------
+-- DBTITLE 1,Cria tabela claims_enriched com joins
+-- Combina claims deduplicados com policies e customers
 CREATE TABLE ${catalog}.${schema_silver}.claims_enriched
 AS
 SELECT
