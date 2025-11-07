@@ -1,3 +1,5 @@
+-- Databricks notebook source
+-- COMMAND ----------
 -- Ingestão batch de dados de claims para a camada bronze
 -- Este script processa TODOS os arquivos claims*.csv do volume automaticamente
 -- Volume: /Volumes/${catalog}/00_landing/sql_server/
@@ -12,9 +14,12 @@
 -- Ideal para reprocessar dados quando novos arquivos chegam com o mesmo schema
 -- O padrão glob claims*.csv processa automaticamente todos os arquivos que correspondem
 
+-- COMMAND ----------
+-- DBTITLE 1,Configuração do catálogo e schema
 USE CATALOG ${catalog};
 USE SCHEMA ${schema};
 
+-- COMMAND ----------
 -- Remove a tabela se existir (para re-ingestão completa)
 DROP TABLE IF EXISTS ${catalog}.${schema}.claims;
 
@@ -31,6 +36,8 @@ DROP TABLE IF EXISTS ${catalog}.${schema}.claims;
 -- UNION ALL
 -- SELECT * FROM read_files('/Volumes/${catalog}/00_landing/sql_server/claims_02.csv', format => 'csv');
 
+-- COMMAND ----------
+-- Cria a tabela bronze processando TODOS os arquivos claims*.csv automaticamente
 CREATE TABLE ${catalog}.${schema}.claims
 AS SELECT *
 FROM read_files(
